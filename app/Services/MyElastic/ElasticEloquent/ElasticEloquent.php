@@ -30,8 +30,8 @@ class ElasticEloquent implements ElasticEloquentInterface
 
     public function find(int $id)
     {
-       $items = $this->getCollection();
-      return $items->where("_id", "=", $id)->first();
+        $items = $this->getCollection();
+        return $items->where("_id", "=", $id)->first();
     }
 
     public function getTook()
@@ -56,6 +56,6 @@ class ElasticEloquent implements ElasticEloquentInterface
 
     public function getCollection(): Collection
     {
-       return collect($this->getItems());
+        return collect($this->getItems());
     }
 }
