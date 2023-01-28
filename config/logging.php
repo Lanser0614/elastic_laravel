@@ -56,7 +56,10 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single', 'elasticsearch'],
+            'channels' => [
+                'single',
+                'elasticsearch'
+            ],
             'ignore_exceptions' => false,
         ],
 
@@ -87,7 +90,7 @@ return [
             'handler'        => ElasticsearchHandler::class,
             'formatter'      => ElasticsearchFormatter::class,
             'formatter_with' => [
-                'index' => 'abc-students-log',
+                'index' => 'abc-sql-log-route-new',
                 'type'  => '_doc',
             ],
             'handler_with'   => [

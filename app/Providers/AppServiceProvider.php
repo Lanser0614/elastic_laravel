@@ -3,6 +3,12 @@
 namespace App\Providers;
 
 use App\Services\MyElastic\ElasticConnect\MyElasticConnect;
+use Dflydev\DotAccessData\Data;
+use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Database\QueryException;
+use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,8 +30,21 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        //
+        DB::listen(function (QueryExecuted $query) {
+            Log::error(
+                "My Sql Logging",
+                [
+                    "sql" => $query->sql,
+                    'bindings' => $query->bindings,
+                    'sql_time_working' => $query->time,
+                    "url" => request()->url(),
+                    "queryParam" => request()->query(),
+                    "body" => request()->request->all()
+                ]
+            );
+
+        });
     }
 }

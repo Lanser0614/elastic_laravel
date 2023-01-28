@@ -19,6 +19,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post("/test/post", function (Request $request){
+    $i = \App\Models\Post::query()->find(4);
+    return $request->all();
+});
+
 Route::get('/posts/search', [PostController::class, 'search']);
 Route::get('/posts/test', [PostController::class, 'elkaBuilder']);
 Route::get('/posts/simpleSearch', [PostController::class, 'simpleSearch']);

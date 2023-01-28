@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    Log::error('ishladi qalesan', ['test context']);
-    return view('welcome');
+Route::get('/{id}', function ($id) {
+    return \App\Models\Post::query()->find($id);
+//    Log::error('ishladi qalesan', ['test context']);
+//    return view('welcome');
 });
