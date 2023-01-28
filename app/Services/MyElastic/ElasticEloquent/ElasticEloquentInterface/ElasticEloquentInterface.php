@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\MyElastic\ElasticEloquent\Interface\ElasticEloquentInterface;
+namespace App\Services\MyElastic\ElasticEloquent\ElasticEloquentInterface;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services\MyElastic\ElasticEloquent\Interface;
+namespace App\Services\MyElastic\ElasticEloquent;
 
-use App\Services\MyElastic\ElasticEloquent\Interface\ElasticEloquentInterface\ElasticEloquentInterface;
+use App\Services\MyElastic\ElasticEloquent\ElasticEloquentInterface\ElasticEloquentInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;

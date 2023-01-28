@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Services\MyElastic\ElasticConnect\MyElasticConnect;
-use App\Services\MyElastic\ElasticEloquent\Interface\ElasticEloquent;
+use App\Services\MyElastic\ElasticEloquent\ElasticEloquent;
 use App\Services\MyElastic\ElasticSearchBuilder\ElasticBuilder;
 use Exception;
 use Illuminate\Http\Request;
