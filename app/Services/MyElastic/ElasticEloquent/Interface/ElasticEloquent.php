@@ -6,12 +6,10 @@ use App\Services\MyElastic\ElasticEloquent\Interface\ElasticEloquentInterface\El
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
-use PhpParser\Node\Expr\Cast\Object_;
 use stdClass;
 
 class ElasticEloquent implements ElasticEloquentInterface
 {
-    public $results;
     public stdClass $elasticItem;
 
     public function __construct(stdClass $elasticItem)
@@ -38,12 +36,12 @@ class ElasticEloquent implements ElasticEloquentInterface
 
     public function getTook()
     {
-        // TODO: Implement getTook() method.
+        return $this->elasticItem->took;
     }
 
     public function getShards()
     {
-        // TODO: Implement getShards() method.
+        return $this->elasticItem->_shards;
     }
 
     public function getTotal()
