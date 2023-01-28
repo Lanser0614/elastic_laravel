@@ -1,5 +1,8 @@
 <?php
 
+use Elastic\Elasticsearch\ClientBuilder;
+use Monolog\Formatter\ElasticsearchFormatter;
+use Monolog\Handler\ElasticsearchHandler;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
@@ -53,7 +56,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['single', 'elasticsearch'],
             'ignore_exceptions' => false,
         ],
 
@@ -76,6 +79,23 @@ return [
             'username' => 'Laravel Log',
             'emoji' => ':boom:',
             'level' => env('LOG_LEVEL', 'critical'),
+        ],
+
+        'elasticsearch' => [
+            'driver'         => 'monolog',
+            'level'          => 'debug',
+            'handler'        => ElasticsearchHandler::class,
+            'formatter'      => ElasticsearchFormatter::class,
+            'formatter_with' => [
+                'index' => 'abc-students-log',
+                'type'  => '_doc',
+            ],
+            'handler_with'   => [
+                'client' =>  ClientBuilder::create()
+                    ->setHosts(['http://localhost:9200'])
+                    ->setBasicAuthentication('elastic', 'changeme')
+                    ->build(),
+            ],
         ],
 
         'papertrail' => [
