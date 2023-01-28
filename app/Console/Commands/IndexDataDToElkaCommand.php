@@ -37,7 +37,7 @@ class IndexDataDToElkaCommand extends Command
      * @throws ServerResponseException
      * @throws MissingParameterException
      */
-    public function handle()
+    public function handle(): void
     {
         $client = app(MyElasticConnect::class);
 
