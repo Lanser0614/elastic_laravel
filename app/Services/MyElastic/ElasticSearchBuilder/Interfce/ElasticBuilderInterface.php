@@ -22,5 +22,9 @@ interface ElasticBuilderInterface
 
     public function setJsonEncode();
 
+    public function setMatch(array $data);
+
+    public function setMatchWithFuzziness(array $data, int $level = 1);
+
     public function getQuery(): array;
 }

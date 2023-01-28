@@ -109,5 +109,28 @@ class ElasticBuilder implements ElasticBuilderInterface
     }
 
 
+    public function setMatch(array $data)
+    {
+        $this->query["body"]["query"] += [
+            "match" => [
+                array_key_first($data) => $data[array_key_first($data)]
+            ]
+        ];
 
+        return $this;
+    }
+
+    public function setMatchWithFuzziness(array $data, int $level = 1)
+    {
+        $this->query["body"]["query"] += [
+            "match" => [
+                array_key_first($data) => [
+                    "query" => $data[array_key_first($data)],
+                    "fuzziness" => $level
+                ]
+            ]
+        ];
+
+        return $this;
+    }
 }

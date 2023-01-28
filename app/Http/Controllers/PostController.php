@@ -31,7 +31,7 @@ class PostController extends Controller
                 "content",
                 "title"
             ])
-            ->SetSearchValue("sa")
+            ->SetSearchValue("Aliza")
             ->SetFuzziness(2)
             ->setJsonEncode()
             ->getQuery();
@@ -43,6 +43,48 @@ class PostController extends Controller
         return $elasticEloquent->paginate((int)$request->perPage, (int)$request->page);
 
 
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function simpleSearch(ElasticBuilder $elkaBuilder)
+    {
+        $client = app(MyElasticConnect::class);
+
+        $elkaBuilder
+            ->SetIndex(Post::ELASTICSEARCH_INDEX)
+            ->SetQuery(1000)
+            ->setMatch(["content" => "was the same age as herself"])
+            ->setJsonEncode()
+            ->getQuery();
+
+        $results = $client->search($elkaBuilder->query)->asObject();
+
+        $elasticEloquent = new ElasticEloquent($results);
+
+        return $elasticEloquent->paginate();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function simpleSearchFuzziness(ElasticBuilder $elkaBuilder)
+    {
+        $client = app(MyElasticConnect::class);
+
+        $elkaBuilder
+            ->SetIndex(Post::ELASTICSEARCH_INDEX)
+            ->SetQuery(1000)
+            ->setMatchWithFuzziness(["title" => "Dr. Bernardo Leannon"], 1)
+            ->setJsonEncode()
+            ->getQuery();
+
+        $results = $client->search($elkaBuilder->query)->asObject();
+
+        $elasticEloquent = new ElasticEloquent($results);
+
+        return $elasticEloquent->paginate();
     }
 
     public function search(Request $request)
@@ -63,10 +105,7 @@ class PostController extends Controller
             ]
         ];
 
-        $params = [
-            'index' => Post::ELASTICSEARCH_INDEX,
-            'body' => json_encode($query)
-        ];
+        $params = $this->getArr($query);
 
         $results = $client->search($params)->asArray();
         $answer = [];
@@ -95,5 +134,17 @@ class PostController extends Controller
             'path' => Paginator::resolveCurrentPath(),
             'pageName' => 'page',
         ]);
+    }
+
+    /**
+     * @param array $query
+     * @return array
+     */
+    private function getArr(array $query): array
+    {
+        return [
+            'index' => Post::ELASTICSEARCH_INDEX,
+            'body' => json_encode($query)
+        ];
     }
 }
