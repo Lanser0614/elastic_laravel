@@ -1,6 +1,6 @@
 <?php
 
-namespace App\MyElastic;
+namespace App\Services\MyElastic\ElasticConnect;
 
 use Elastic\Elasticsearch\Client;
 use Elastic\Elasticsearch\ClientBuilder;

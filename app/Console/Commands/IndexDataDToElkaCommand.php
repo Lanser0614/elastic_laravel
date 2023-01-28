@@ -3,9 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Post;
-use App\MyElastic\MyElasticConnect;
-use Elastic\Elasticsearch\Client;
-use Elastic\Elasticsearch\ClientBuilder;
+use App\Services\MyElastic\ElasticConnect\MyElasticConnect;
 use Elastic\Elasticsearch\Exception\AuthenticationException;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\MissingParameterException;

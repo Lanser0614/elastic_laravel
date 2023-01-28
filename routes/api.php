@@ -20,3 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/posts/search', [PostController::class, 'search']);
+Route::get('/posts/test', [PostController::class, 'elkaBuilder']);

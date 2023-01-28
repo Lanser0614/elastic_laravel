@@ -2,18 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePostRequest;
-use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
-use App\MyElastic\MyElasticConnect;
+use App\Services\MyElastic\ElasticConnect\MyElasticConnect;
+use App\Services\MyElastic\ElasticEloquent\Interface\ElasticEloquent;
+use App\Services\MyElastic\ElasticSearchBuilder\ElasticBuilder;
+use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
+use function response;
 
 class PostController extends Controller
 {
+    /**
+     * @throws Exception
+     */
+    public function elkaBuilder(ElasticBuilder $elkaBuilder, Request $request)
+    {
+        $client = app(MyElasticConnect::class);
+
+        $elkaBuilder
+            ->SetIndex(Post::ELASTICSEARCH_INDEX)
+            ->SetQuery(1000)
+            ->SetMultiMatch()
+            ->setAnalyzer("my_analyzer")
+            ->setFields([
+                "content",
+                "title"
+            ])
+            ->SetSearchValue("sa")
+            ->SetFuzziness(2)
+            ->setJsonEncode()
+            ->getQuery();
+
+        $results = $client->search($elkaBuilder->query)->asObject();
+
+        $elasticEloquent = new ElasticEloquent($results);
+
+        return $elasticEloquent->paginate((int)$request->perPage, (int)$request->page);
+
+
+    }
+
     public function search(Request $request)
     {
         $client = app(MyElasticConnect::class);
@@ -46,16 +77,16 @@ class PostController extends Controller
 
         $paginator = $this->paginate($answer, $request->per_page ?? null, $request->page ?? null);
 
-        return \response()->json($paginator);
+        return response()->json($paginator);
     }
 
     private function paginate($items, $perPage, $page)
     {
-        if (is_null($perPage)){
+        if (is_null($perPage)) {
             $perPage = 5;
         }
 
-        if (is_null($page)){
+        if (is_null($page)) {
             $page = 1;
         }
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);

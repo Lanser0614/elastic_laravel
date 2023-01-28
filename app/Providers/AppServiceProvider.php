@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\MyElastic\MyElasticConnect;
+use App\Services\MyElastic\ElasticConnect\MyElasticConnect;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
