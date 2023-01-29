@@ -33,11 +33,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         DB::listen(function (QueryExecuted $query) {
-            Log::error(
+            Log::debug(
                 "My Sql Logging",
                 [
                     "sql" => $query->sql,
-                    'bindings' => $query->bindings,
+                    'REQUEST_TIME' => request()->server()['REQUEST_TIME'],
                     'sql_time_working' => $query->time,
                     "url" => request()->url(),
                     "queryParam" => request()->query(),

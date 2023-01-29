@@ -8,7 +8,7 @@ interface ElasticBuilderInterface
 
     public function SetQuery(int $size = 10);
 
-    public function setSize(int $size);
+    public function setSize(int $size = 10);
 
     public function SetMultiMatch();
 
