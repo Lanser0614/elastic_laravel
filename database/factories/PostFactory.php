@@ -20,7 +20,7 @@ class PostFactory extends Factory
         return [
             'title' => $this->faker->name,
             'content' => $this->faker->realText,
-            'phone' => $this->faker->phoneNumber()
+            'phone' => $this->faker->e164PhoneNumber
         ];
     }
 }

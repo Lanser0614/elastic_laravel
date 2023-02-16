@@ -42,31 +42,31 @@ class IndexDataDToElkaCommand extends Command
         $client = app(MyElasticConnect::class);
 
         // Create a new index with settings
-//        $response = $client->indices()->create(Post::getIndexSettings());
+        $response = $client->indices()->create(Post::getIndexSettings());
 
 
-        $posts = Post::query();
-
-        $this->output->progressStart($posts->count());
-
-        $posts->chunk(100, function ($rows) use ($client) {
-            foreach ($rows as $row) {
-                $this->output->progressAdvance();
-
-                $params = [
-                    'index' => Post::ELASTICSEARCH_INDEX,
-                    'id' => $row->id,
-                    'body' => [
-                        'title' => $row->title,
-                        'content' => $row->content,
-                        'phone' => $row->phone,
-                    ]
-                ];
-
-                // Document will be indexed to my_index/_doc/my_id
-                $client->index($params);
-            }
-        });
+//        $posts = Post::query();
+//
+//        $this->output->progressStart($posts->count());
+//
+//        $posts->chunk(100, function ($rows) use ($client) {
+//            foreach ($rows as $row) {
+//                $this->output->progressAdvance();
+//
+//                $params = [
+//                    'index' => Post::ELASTICSEARCH_INDEX,
+//                    'id' => $row->id,
+//                    'body' => [
+//                        'title' => $row->title,
+//                        'content' => $row->content,
+//                        'phone' => $row->phone,
+//                    ]
+//                ];
+//
+//                // Document will be indexed to my_index/_doc/my_id
+//                $client->index($params);
+//            }
+//        });
 
         $this->output->progressFinish();
 

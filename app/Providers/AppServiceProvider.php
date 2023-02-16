@@ -3,10 +3,9 @@
 namespace App\Providers;
 
 use App\Services\MyElastic\ElasticConnect\MyElasticConnect;
-use Dflydev\DotAccessData\Data;
+use App\Services\MyElastic\ElasticSearchBuilder\ElasticBuilder;
+use App\Services\MyElastic\ElasticSearchBuilder\Interfce\ElasticBuilderInterface;
 use Illuminate\Database\Events\QueryExecuted;
-use Illuminate\Database\QueryException;
-use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
@@ -23,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(MyElasticConnect::class, function () {
             return (new MyElasticConnect())->getElasticClient();
         });
+        $this->app->bind(ElasticBuilderInterface::class, ElasticBuilder::class);
     }
 
     /**

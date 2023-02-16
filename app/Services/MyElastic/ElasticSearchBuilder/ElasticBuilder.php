@@ -3,8 +3,11 @@
 namespace App\Services\MyElastic\ElasticSearchBuilder;
 
 
+use App\Services\MyElastic\ElasticConnect\MyElasticConnect;
 use App\Services\MyElastic\ElasticSearchBuilder\Interfce\ElasticBuilderInterface;
+use Elastic\Elasticsearch\Response\Elasticsearch;
 use Exception;
+use Http\Promise\Promise;
 
 class ElasticBuilder implements ElasticBuilderInterface
 {
@@ -16,7 +19,7 @@ class ElasticBuilder implements ElasticBuilderInterface
         $this->query = [];
     }
 
-    public function SetIndex(string $index)
+    public function SetIndex(string $index): ElasticBuilderInterface
     {
         $this->reset();
         $this->query = [
@@ -29,7 +32,7 @@ class ElasticBuilder implements ElasticBuilderInterface
     /**
      * @throws Exception
      */
-    public function SetQuery(int $size = 10)
+    public function SetQuery(int $size = 10): ElasticBuilderInterface
     {
         if (empty($this->query)) {
             throw new Exception("Set index for query");
@@ -45,7 +48,7 @@ class ElasticBuilder implements ElasticBuilderInterface
         return $this;
     }
 
-    public function setSize(int $size = 10)
+    public function setSize(int $size = 10): ElasticBuilderInterface
     {
         $this->query["body"] += [
             "size" => $size,
@@ -54,7 +57,7 @@ class ElasticBuilder implements ElasticBuilderInterface
         return $this;
     }
 
-    public function setAggs(string $field)
+    public function setAggs(string $field): ElasticBuilderInterface
     {
         $this->query["body"] += [
             "aggs" => [
@@ -69,7 +72,7 @@ class ElasticBuilder implements ElasticBuilderInterface
         return $this;
     }
 
-    public function SetMultiMatch()
+    public function SetMultiMatch(): ElasticBuilderInterface
     {
         $this->query["body"]["query"] += [
             "multi_match" => [
@@ -80,7 +83,7 @@ class ElasticBuilder implements ElasticBuilderInterface
         return $this;
     }
 
-    public function setAnalyzer(string $analyzer)
+    public function setAnalyzer(string $analyzer): ElasticBuilderInterface
     {
         $this->query["body"]["query"]["multi_match"] += [
             "analyzer" => $analyzer,
@@ -89,7 +92,7 @@ class ElasticBuilder implements ElasticBuilderInterface
         return  $this;
     }
 
-    public function SetFuzziness(int $level)
+    public function SetFuzziness(int $level): ElasticBuilderInterface
     {
         $this->query["body"]["query"]["multi_match"] += [
             "fuzziness" => $level,
@@ -98,7 +101,7 @@ class ElasticBuilder implements ElasticBuilderInterface
         return  $this;
     }
 
-    public function setFields(array $fields)
+    public function setFields(array $fields): ElasticBuilderInterface
     {
         $this->query["body"]["query"]["multi_match"] += [
             "fields" => $fields,
@@ -107,7 +110,7 @@ class ElasticBuilder implements ElasticBuilderInterface
         return  $this;
     }
 
-    public function SetSearchValue(string $value)
+    public function SetSearchValue(string $value): ElasticBuilderInterface
     {
         $this->query["body"]["query"]["multi_match"] += [
             "query" => $value,
@@ -116,7 +119,7 @@ class ElasticBuilder implements ElasticBuilderInterface
         return  $this;
     }
 
-    public function setJsonEncode()
+    public function setJsonEncode(): ElasticBuilderInterface
     {
         $this->query["body"] = json_encode($this->query['body']);
         return  $this;
@@ -128,7 +131,7 @@ class ElasticBuilder implements ElasticBuilderInterface
     }
 
 
-    public function setMatch(array $data)
+    public function setMatch(array $data): ElasticBuilderInterface
     {
         $this->query["body"]["query"] += [
             "match" => [
@@ -139,7 +142,7 @@ class ElasticBuilder implements ElasticBuilderInterface
         return $this;
     }
 
-    public function setMatchWithFuzziness(array $data, int $level = 1)
+    public function setMatchWithFuzziness(array $data, int $level = 1): ElasticBuilderInterface
     {
         $this->query["body"]["query"] += [
             "match" => [
@@ -152,4 +155,5 @@ class ElasticBuilder implements ElasticBuilderInterface
 
         return $this;
     }
+
 }

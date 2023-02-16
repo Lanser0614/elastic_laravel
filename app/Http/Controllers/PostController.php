@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Services\MyElastic\ElasticConnect\MyElasticConnect;
 use App\Services\MyElastic\ElasticEloquent\ElasticEloquent;
 use App\Services\MyElastic\ElasticSearchBuilder\ElasticBuilder;
+use App\Services\MyElastic\ElasticSearchBuilder\Interfce\ElasticBuilderInterface;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -15,14 +16,19 @@ use function response;
 
 class PostController extends Controller
 {
+    public function __construct(private ElasticBuilderInterface $elkaBuilder)
+    {
+    }
+
+   
     /**
      * @throws Exception
      */
-    public function elkaBuilder(ElasticBuilder $elkaBuilder, Request $request)
+    public function elkaBuilder( Request $request)
     {
         $client = app(MyElasticConnect::class);
 
-        $elkaBuilder
+        $this->elkaBuilder
             ->SetIndex(Post::ELASTICSEARCH_INDEX)
             ->SetQuery(1000)
             ->SetMultiMatch()
@@ -36,7 +42,7 @@ class PostController extends Controller
             ->setJsonEncode()
             ->getQuery();
 
-        $results = $client->search($elkaBuilder->query)->asObject();
+        $results = $client->search($this->elkaBuilder->query)->asObject();
 
         $elasticEloquent = new ElasticEloquent($results);
 
@@ -90,20 +96,31 @@ class PostController extends Controller
     public function search(Request $request)
     {
         $client = app(MyElasticConnect::class);
-
         $query = [
             "query" => [
-                "multi_match" => [
-                    "query" => "ханк",
-                    "analyzer" => "my_analyzer",
-                    "fields" => [
-                        "content",
-                        "title"
-                    ],
-                    "fuzziness" => 2
+                "match" => [
+                   "phone" => [
+                       "query" => $request->input('phone'),
+                       "analyzer" => "regex_analyzer"
+                   ]
                 ]
             ]
         ];
+
+
+//        $query = [
+//            "query" => [
+//                "match" => [
+//                    "query" => "ханк",
+//                    "analyzer" => "my_analyzer",
+//                    "fields" => [
+//                        "content",
+//                        "title"
+//                    ],
+//                    "fuzziness" => 2
+//                ]
+//            ]
+//        ];
 
         $params = $this->getArr($query);
 
